@@ -1,4 +1,4 @@
-// pretty table metrics w/ benchmarking, unit conversions and a few format outputs { csv, tsv, markdown, ascii art } 
+// pretty table metrics w/ benchmarking, unit conversions and a few format outputs { csv, tsv, markdown, ascii art }
 // uses auto_table by Dmitry Ledentsov (public domain) and units class by Calum Grant (boost licensed).
 // - rlyeh, zlib licensed
 
@@ -62,7 +62,7 @@ class table {
     size_t header_every_nth_row;
     size_t horizontal_padding;
 
-	char topleft, hline, topright, left, vline, right;
+    char topleft, hline, topright, left, vline, right;
     char odd, even;
     unsigned parity;
 
@@ -72,17 +72,17 @@ public:
 
         odd = even = ' ';
         parity = 0;
-		/****/ if( fmt == fmt_csv || fmt == fmt_tsv ) {
-			topleft = ' ', topright = ' ', hline = ' ';
-			left = ' ', vline = (fmt == fmt_csv ? ',' : '\t' ), right = ' ';
-		} else if( fmt == fmt_markdown ) {
-			topleft = ' ', hline = ' ', topright = ' ';
-			left = '|', vline = '|', right = '|';
-		} else {
-			topleft = '+', hline = '-', topright = '+';
-			left = '|', vline = '|', right = '|';
-		}
-	}
+        /****/ if( fmt == fmt_csv || fmt == fmt_tsv ) {
+            topleft = ' ', topright = ' ', hline = ' ';
+            left = ' ', vline = (fmt == fmt_csv ? ',' : '\t' ), right = ' ';
+        } else if( fmt == fmt_markdown ) {
+            topleft = ' ', hline = ' ', topright = ' ';
+            left = '|', vline = '|', right = '|';
+        } else {
+            topleft = '+', hline = '-', topright = '+';
+            left = '|', vline = '|', right = '|';
+        }
+    }
 
 private:
     size_t width(std::string const& s) { return s.length(); }
@@ -95,17 +95,17 @@ private:
     size_t get_total_width() {
         size_t sum = std::accumulate(column_widths.begin(), column_widths.end(), 0,
             [] (size_t i, const std::pair<const size_t, size_t>& x) {
-                return i + x.second; 
+                return i + x.second;
             } );
         return sum + column_widths.size() + 2 * column_widths.size() * horizontal_padding;
     }
     void print_horizontal_line(std::ostream& stream) {
-		if( fmt == fmt_ascii ) {
+        if( fmt == fmt_ascii ) {
         stream << topleft;
         auto sum = get_total_width() - 1;
         stream << std::string( sum, hline );
         stream << topright << "\n";
-		}
+        }
     }
 
     std::string pad_column(std::string const& s, size_t column, bool is_right ) {
@@ -133,7 +133,7 @@ private:
             sep = vline;
         }
 
-		stream << right << "\n";
+        stream << right << "\n";
     }
 
     void print_header(std::ostream& stream) {
@@ -147,14 +147,14 @@ private:
             char sep = left;
             for (size_t i = 0; i < column_count; i++) {
                 stream << sep;
-                std::string fill( column_widths[i] + horizontal_padding * 2 , '-' ); 
+                std::string fill( column_widths[i] + horizontal_padding * 2 , '-' );
                 if( column_aligns[i] > 0 ) fill.back() = ':';
                 else fill[0] = ':';
                 stream << fill;
                 sep = vline;
             }
 
-            stream << right << "\n";                
+            stream << right << "\n";
         }
     }
 
@@ -168,7 +168,7 @@ private:
                 (row - 1) % header_every_nth_row == 0) {
                 print_horizontal_line(stream);
                 print_header(stream);
-                print_horizontal_line(stream);                
+                print_horizontal_line(stream);
             }
 
             print_row(rows[row], stream, 15);
@@ -177,8 +177,8 @@ private:
         if (rows[row_count - 1].size() > 0) print_row(rows[row_count - 1], stream, 15 );
     }
 
-	void make_stats() {
-        // make stats and indirectly adjust widths as well 
+    void make_stats() {
+        // make stats and indirectly adjust widths as well
 
         unsigned rows_n = rows.size() - 1; // exclude header
         acc = decltype(acc)();
@@ -192,7 +192,7 @@ private:
                 append( avg, 0 );
                 append( min, 0 );
                 append( max, 0 );
-            }            
+            }
         } else {
             for( auto end = column_widths.size(), index = end - end; index < end; ++index ) {
                 double vacc = 0, vmin = DBL_MAX, vmax = 0;
@@ -206,14 +206,14 @@ private:
                 append(avg, vacc / rows_n );
                 append(min, vmin );
                 append(max, vmax );
-            }            
+            }
         }
-	}
+    }
 
     void print_tab(std::ostream &stream, const std::string &name) {
         if( fmt == fmt_ascii ) {
             stream << "+-" << std::string( name.size(), '-' ) << "+" << std::endl;
-            stream << "| " << name << " \\" << std::string( get_total_width() - name.size() - 4, '-' ) << "+" << std::endl;            
+            stream << "| " << name << " \\" << std::string( get_total_width() - name.size() - 4, '-' ) << "+" << std::endl;
         }
     }
 
@@ -234,10 +234,10 @@ public:
     }
 
     table& add_column_right(std::string const& name, size_t min_width = 0) {
-		add_column_left( name, min_width );
-		column_aligns[column_widths.size() - 1] = 1;
-		return *this;
-	}
+        add_column_left( name, min_width );
+        column_aligns[column_widths.size() - 1] = 1;
+        return *this;
+    }
 
     table& with_header_every_nth_row(size_t n) {
         if( fmt != fmt_markdown ) header_every_nth_row = n;
@@ -296,14 +296,14 @@ public:
     void print(std::ostream& stream, bool with_stats = 1 ) {
         // gen stats && adjusts widths indirectly as well
         if( with_stats ) {
-            make_stats(); 
+            make_stats();
             print_tab(stream, "metrics");
             print_header(stream);
             print_horizontal_line(stream);
         } else {
             print_horizontal_line(stream);
             print_header(stream);
-            print_horizontal_line(stream);            
+            print_horizontal_line(stream);
         }
         print_values(stream, rows);
         if( with_stats ) {
@@ -320,7 +320,7 @@ public:
         print_footer(stream);
     }
 
-    std::stringstream& get_stream() { 
+    std::stringstream& get_stream() {
         return my_stream;
     }
 };

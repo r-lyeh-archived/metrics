@@ -1,6 +1,10 @@
-# metrics
-- Pretty table metrics w/ benchmarking, unit conversions in CSV,TSV,ASCII,markdown (C++11)
-- Pretty is ZLIB licensed.
+metrics <a href="https://travis-ci.org/r-lyeh/metrics"><img src="https://api.travis-ci.org/r-lyeh/metrics.svg?branch=master" align="right" /></a>
+=====
+
+- Metrics is a pretty table printer in CSV,TSV,ASCII,markdown (C++11).
+- Metrics provides handy unit conversions and minimal benchmarking.
+- Metrics provides additional accumulation, average, minimum and maximum stats.
+- Metrics is ZLIB licensed.
 
 ## tl;dr
 ```c++
@@ -119,6 +123,9 @@ int main() {
 | 0.000     |  36.000 |     1048576.000 |              6000.000 |    200.000 |                 37911.597 |
 +--------------------------------------------------------------------------------------------------------+
 ```
+
+## todo
+- [ ] htmls/charts/svg output
 
 ## licenses
 - [metrics](https://github.com/r-lyeh/metrics), ZLIB licensed.
